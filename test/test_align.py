@@ -14,8 +14,19 @@ def test_nw_alignment():
     """
     seq1, _ = read_fasta("./data/test_seq1.fa")
     seq2, _ = read_fasta("./data/test_seq2.fa")
-    pass
     
+    nw = NeedlemanWunsch("./substitution_matrices/BLOSUM62.mat", gap_open=-10, gap_extend=-1)
+    _, _, _, matrix = nw.align(seq1, seq2)
+
+    expected_matrix = np.array([
+        [0, -np.inf, -np.inf, -np.inf],
+        [-np.inf, 5, -11, -13],
+        [-np.inf, -12, 4, -8],
+        [-np.inf, -12, -1, 5],
+        [-np.inf, -14, -6, 4]
+    ])
+    
+    np.testing.assert_array_equal(expected_matrix, matrix)
 
 def test_nw_backtrace():
     """
@@ -27,8 +38,16 @@ def test_nw_backtrace():
     """
     seq3, _ = read_fasta("./data/test_seq3.fa")
     seq4, _ = read_fasta("./data/test_seq4.fa")
-    pass
+    nw = NeedlemanWunsch("./substitution_matrices/BLOSUM62.mat", gap_open=-10, gap_extend=-1)
+    score, aligned_seq1, aligned_seq2, _ = nw.align(seq3, seq4)
 
+    assert score == 17, f"Expected score 17, got {score}"
 
+    expected_seq1 = "MAVHQLIRRP"
+    expected_seq2 = "M---QLIRHP"
 
+    assert aligned_seq1 == expected_seq1, f"Expected {expected_seq1}, got {aligned_seq1}"
+    assert aligned_seq2 == expected_seq2, f"Expected {expected_seq2}, got {aligned_seq2}"
 
+if __name__ == "__main__":
+    pytest.main()

@@ -1,0 +1,8 @@
+Metadata-Version: 2.2
+Name: align
+Version: 0.1.0
+Requires-Python: >=3.7
+Requires-Dist: numpy
+Requires-Dist: typing
+Dynamic: requires-dist
+Dynamic: requires-python
